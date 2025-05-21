@@ -2,9 +2,9 @@ from shiny import App, ui, render, reactive
 from shinywidgets import render_plotly
 import plotly.express as px
 import plotly.graph_objects as go
-from Horizon import get_funding_summary
+#from Horizon import get_funding_summary
 
-funding_summary = get_funding_summary()
+#funding_summary = get_funding_summary()
 
 # --- Country data ---
 countries_data = {
