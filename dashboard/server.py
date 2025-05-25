@@ -4,6 +4,7 @@ import plotly.express as px
 import ipywidgets as widgets
 import pandas as pd
 import os
+import pycountry
 
 # Load in data files from Data folder
 DATA = os.path.join(os.path.dirname(__file__), "..", "Data")
@@ -201,6 +202,44 @@ def server(input, output, session):
         fig.update_layout(xaxis_tickangle=45)
 
         return fig
+    
 
+    
+    @output
+    @render_widget
+    def europe_map():
+            # Use global `data` which is assumed to be preloaded
+            global data
+
+            # Convert ISO-2 to ISO-3 if needed
+            if "iso3" not in data.columns:
+                def iso2_to_iso3(iso2_code):
+                    try:
+                        return pycountry.countries.get(alpha_2=iso2_code).alpha_3
+                    except:
+                        return None
+
+                data["iso3"] = data["coordinator_country"].apply(iso2_to_iso3)
+
+            # Drop rows where ISO-3 conversion failed
+            filtered_data = data.dropna(subset=["iso3"])
+
+            # Plot
+            fig = px.choropleth(
+                filtered_data,
+                locations="iso3",                # ISO-3 codes
+                color="org_sum_ecContribution",           # Numeric value
+                hover_name="coordinator_country",            # Hover label
+                color_continuous_scale="Blues",
+                projection="natural earth",
+                scope="europe"
+            )
+
+            fig.update_layout(
+                title="Total EU Funding by Country",
+                margin={"r": 0, "t": 30, "l": 0, "b": 0}
+            )
+
+            return fig
 
 

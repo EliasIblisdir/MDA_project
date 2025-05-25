@@ -52,6 +52,13 @@ app_ui = ui.page_fluid(
 
         output_widget("plot_cost_diff_quantiles"),
         ui.p("14,271 projects show exact cost agreement. Remaining projects range from €-200M underreporting to €20M overreporting at the org level.")
+    ),
+    
+    ui.nav_panel(
+        "Distribution by Country",
+        ui.h3("Map of EU Funding Distribution by Country"),
+        ui.p("This interactive map shows the distribution of EU contributions by country based on organization-level data."),
+        output_widget("europe_map")
     )
 
     )
